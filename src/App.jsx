@@ -1,70 +1,119 @@
-import { useState } from "react";
-import "./App.css";
+import React from "react";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 
-function App() {
-  const [count, setCount] = useState(0);
+import Tap from "./pages/Tap";
+import Ref from "./pages/Ref";
+import Boost from "./pages/Boost";
+import Stats from "./pages/Stats";
+import Task from "./pages/Task";
+import {
+  FireIcon,
+  ChartBarIcon,
+  CircleStackIcon,
+  UserPlusIcon,
+  CheckCircleIcon,
+} from "@heroicons/react/24/outline";
 
-  const handleClick = (e) => {
-    setCount(count + 1);
+const NavBar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const coin = e.target;
-    const rect = coin.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const deltaX = x - centerX;
-    const deltaY = y - centerY;
-    const maxTilt = 20; // Max tilt angle
-
-    // Determine the distance from the center
-    const distanceFromCenter = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-    // Calculate tilt angles
-    const tiltX = (deltaY / centerY) * maxTilt;
-    const tiltY = (deltaX / centerX) * maxTilt;
-
-    if (distanceFromCenter < centerX * 0.3) {
-      // Click is near the center
-      coin.style.transform = "scale(0.99)";
-    } else {
-      // Click is on the edge
-      coin.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
-    }
-
-    setTimeout(() => {
-      coin.style.transform = "rotateX(0) rotateY(0) scale(1)";
-    }, 100); // Return to original position after 0.1 seconds
-  };
+  const navItems = [
+    {
+      name: "Ref",
+      icon: <UserPlusIcon style={{ height: 30, width: 30, color: "white" }} />,
+      path: "/ref",
+    },
+    {
+      name: "Task",
+      icon: (
+        <CheckCircleIcon style={{ height: 30, width: 30, color: "white" }} />
+      ),
+      path: "/task",
+    },
+    {
+      name: "Tap",
+      icon: (
+        <CircleStackIcon style={{ height: 30, width: 30, color: "white" }} />
+      ),
+      path: "/",
+    },
+    {
+      name: "Boost",
+      icon: <FireIcon style={{ height: 30, width: 30, color: "white" }} />,
+      path: "/boost",
+    },
+    {
+      name: "Stats",
+      icon: <ChartBarIcon style={{ height: 30, width: 30, color: "white" }} />,
+      path: "/stats",
+    },
+  ];
 
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "center",
+        gap: "10px",
+      }}
+    >
+      {navItems.map((item) => (
+        <div
+          key={item.name}
+          onClick={() => navigate(item.path)}
+          style={{
+            height: "60px",
+            width: "40px",
+            border:
+              location.pathname === item.path
+                ? "2px solid yellow"
+                : "1px solid grey",
+            padding: "5px",
+            paddingRight: "10px",
+            paddingLeft: "10px",
+            borderRadius: "5px",
+            cursor: "pointer",
+          }}
+        >
+          {item.icon}
+          <p style={{ marginTop: 0, color: "white" }}>{item.name}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const App = () => {
+  return (
+    <BrowserRouter>
       <div
-        className="coin"
-        id="coin"
         style={{
-          cursor: "pointer",
-          width: "300px",
-          height: "300px",
-          marginLeft: "auto",
-          marginRight: "auto",
+          display: "flex",
+          flexDirection: "column",
+          // backgroundColor: "red",
+          minHeight: "100vh",
+          justifyContent: "space-between",
         }}
       >
-        <img
-          src="/bitcoin1.png"
-          alt="coin"
-          onClick={(e) => handleClick(e)}
-          width={"100%"}
-          height={"100%"}
-        />
+        <Routes>
+          <Route path="/" element={<Tap />} />
+          <Route path="/ref" element={<Ref />} />
+          <Route path="/boost" element={<Boost />} />
+          <Route path="/stats" element={<Stats />} />
+          <Route path="/task" element={<Task />} />
+        </Routes>
+        <NavBar />
       </div>
-      <h1>Tele Game </h1>
-      <div className="card">
-        <button style={{ cursor: "auto" }}>count is {count}</button>
-        <p>Click Coin to get coins</p>
-      </div>
-    </>
+    </BrowserRouter>
   );
-}
+};
 
 export default App;
