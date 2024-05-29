@@ -1,14 +1,16 @@
+import React, { useState } from "react";
 import {
   BoltIcon,
   FireIcon,
   HandRaisedIcon,
   LightBulbIcon,
 } from "@heroicons/react/24/outline";
-import React from "react";
 import Boosters from "../components/Boosters";
+import BoosterDetails from "../components/BoosterDetails";
+// import "./Boost.css";
 
 const Boost = () => {
-  const [boosters, setBoosters] = React.useState([
+  const [boosters, setBoosters] = useState([
     {
       name: "Multitap",
       level: 1,
@@ -33,6 +35,17 @@ const Boost = () => {
       icon: <BoltIcon style={{ height: 30, width: 30, color: "white" }} />,
     },
   ]);
+
+  const [selectedBooster, setSelectedBooster] = useState(null);
+
+  const handleBoosterClick = (booster) => {
+    setSelectedBooster(booster);
+  };
+
+  const handleClose = () => {
+    setSelectedBooster(null);
+  };
+
   return (
     <div>
       <h4 style={{ color: "grey", marginBottom: 0 }}>Your Share Balance:</h4>
@@ -85,17 +98,25 @@ const Boost = () => {
       <h3 style={{ textAlign: "start" }}>Boosters:</h3>
       <div style={{ overflowY: "scroll" }}>
         {boosters.map((booster, index) => (
-          <Boosters
-            key={index}
-            name={booster.name}
-            level={booster.level}
-            coins={booster.coins}
-            desc={booster.desc}
-            icon={booster.icon}
-            levelShow={true}
-          />
+          <div key={index} onClick={() => handleBoosterClick(booster)}>
+            <Boosters
+              name={booster.name}
+              level={booster.level}
+              coins={booster.coins}
+              desc={booster.desc}
+              icon={booster.icon}
+              levelShow={true}
+            />
+          </div>
         ))}
       </div>
+      {selectedBooster && (
+        <BoosterDetails
+          isVisible={!!selectedBooster}
+          onClose={handleClose}
+          booster={selectedBooster}
+        />
+      )}
     </div>
   );
 };
