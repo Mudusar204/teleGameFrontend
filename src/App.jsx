@@ -99,7 +99,9 @@ const App = () => {
           display: "flex",
           flexDirection: "column",
           // backgroundColor: "red",
+          maxHeight: "100vh",
           minHeight: "100vh",
+          overflowY: "scroll",
           justifyContent: "space-between",
         }}
       >

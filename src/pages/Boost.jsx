@@ -92,6 +92,7 @@ const Boost = () => {
             coins={booster.coins}
             desc={booster.desc}
             icon={booster.icon}
+            levelShow={true}
           />
         ))}
       </div>
